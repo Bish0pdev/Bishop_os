@@ -8,7 +8,7 @@
     font-size: 125%;
     padding: 10px;
     height: 100%;
-    overflow: auto;
+    
   }
   
  /* Style the input */
@@ -22,6 +22,7 @@
   display: inline; /* Add this line to set display to inline */
   width: 1000px;
   white-space: pre-wrap;
+  
 }
 
 /* Style the console log output */
@@ -47,13 +48,11 @@
 }
 
 body {
-  background: url('noise.png') repeat;
   position: relative;
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 body::before {
   content: '';
