@@ -10,7 +10,7 @@
     white-space: pre-wrap;
     -webkit-animation:text-flicker-in-glow 2s both;animation:text-flicker-in-glow 2s both
 }
-body{overflow: hidden;}
+body{overflow: hidden; background-color:black }
 
 
 /* ----------------------------------------------
