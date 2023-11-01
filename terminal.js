@@ -7,20 +7,20 @@ const editor = document.getElementById("editor");
 // Usage example
 const fileSystem = new FileSystem();
 let editorOpen = false; // Variable to track if the editor is open
+// Create a flag to track if the JavaScript PowerShell console is open
+let jsConsoleOpen = false;
 
-GetCommand("-help")
 
 //Initilize my built in files
 Initdefaultfiles(fileSystem);
-
+GetCommand("cat readme.txt")
 //Initially set up the  main prefix
 document.getElementById("main-prefix").innerHTML = " " + fileSystem.where() + ">";
 
 //Input Handleing
 const commandHistory = [];
 let commandHistoryIndex = 0;
-
-inputElement.addEventListener('keydown', (event) => {
+function normalConsoleHandler(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
         const command = inputElement.value;
@@ -30,7 +30,6 @@ inputElement.addEventListener('keydown', (event) => {
         // Display the command with a prefix in the terminal.
         const outputText = `<span class="user-prefix"> ${fileSystem.where()}></span>${command}\n`;
         outputElement.innerHTML += outputText;
-
         GetCommand(command);
 
         inputElement.value = '';
@@ -47,7 +46,8 @@ inputElement.addEventListener('keydown', (event) => {
             inputElement.value = commandHistory[commandHistoryIndex];
         }
     }
-});
+}
+inputElement.addEventListener('keydown',normalConsoleHandler);
 
 function GetCommand(cmd) {
     const args = cmd.split(' '); // Split the command into an array of arguments.
@@ -69,6 +69,7 @@ function GetCommand(cmd) {
             break;
         case "-help":
             const helpText = `
+            (optional) [required]
             Available commands:
             --Misc--
             - clear: Clear the terminal.
@@ -83,9 +84,11 @@ function GetCommand(cmd) {
             - touch [file] [content]: Create a new file with content.
             - cat [file]: Read the contents of a file.
             - back: Goes to parent directory
-            - ed [file]: Bishop_os built in text editor.
-            - - save [file]: Can only be used when ed is open. Will save the edited file.
             -delete [file/directory]: Will remove a directory/file
+            --Applications--
+            - ed (file): Bishop_os built in text editor.
+            - - save [file]: Can only be used when ed is open. Will save the edited file.
+            -js: (WIP EXPERIMENTAL) Js interpretor built into Bishop_os. Currently variables do not work but anything you can do in one line should.
             \n`;
             outputElement.innerHTML += helpText;
             break;
@@ -119,24 +122,31 @@ function GetCommand(cmd) {
             break;
         case "cat":
             const catResult = fileSystem.cat(args[1]);
-            outputElement.innerHTML += '(Read Only)'+'\n'+`<pre id="page" contenteditable="false">${catResult}</pre>` + '\n';
+            outputElement.innerHTML +='\n'+`<pre id="page" contenteditable="false">${catResult}</pre>` + '\n';
             break;
         case "ed":
+            if(editorOpen) {outputElement.innerHTML += "ed: Can only have one editor open at a time. Please save other editor first using save [filename] \n"; break;}
             if (args.length > 1) {
                 const fileName = args[1];
                 const fileContent = fileSystem.cat(fileName);
     
-                if (fileContent) {
+                if (fileContent != `File "${fileName}" not found.`) {
                     outputElement.innerHTML += `(${fileName}: Use "save ${fileName}" in the console to save once you are done)` + '\n' + `<div id="editor-container">
                         <div id="editor" contenteditable="true">${fileContent}</div>
                     </div>`;
     
                     editorOpen = true; // Editor is open
                 } else {
-                    outputElement.innerHTML += `File "${fileName}" not found.\n`;
+                    outputElement.innerHTML += `File "${fileName}" not found. Opening a new file. Use "save [desired file name]" to save the new file`;
+                    outputElement.innerHTML += `<div id="editor-container">
+                        <div id="editor" contenteditable="true"></div></div>`
+                    editorOpen = true; // Editor is open
                 }
             } else {
-                outputElement.innerHTML += 'ed: Missing file name\n';
+                outputElement.innerHTML += `Opening a new file. Use "save [desired file name]" to save the new file`;
+                    outputElement.innerHTML += `<div id="editor-container">
+                        <div id="editor" contenteditable="true"></div></div>`
+                    editorOpen = true; // Editor is open
             }
             break;
     
@@ -146,8 +156,16 @@ function GetCommand(cmd) {
                 const fileName = args[1];
     
                 if (fileName) {
+                    if(fileSystem.ls().includes(fileName)){
                     fileSystem.touch(fileName, editedContent);
-                    outputElement.innerHTML += `File "${fileName}" saved.\n`;
+                    outputElement.innerHTML += `File "${fileName}" overwritten\n`;
+                    document.getElementById("editor").id = "page";
+                    }else{
+                        fileSystem.touch(fileName, editedContent);
+                        outputElement.innerHTML += `New file "${fileName}" saved.\n`;
+                        document.getElementById("editor").id = "page";
+                    }
+                    editorOpen = false;
                 } else {
                     outputElement.innerHTML += 'save: Missing file name\n';
                 }
@@ -170,9 +188,67 @@ function GetCommand(cmd) {
                     outputElement.innerHTML += 'delete: Missing target name\n';
                 }
                 break;
+                // Add a new command to open the JavaScript PowerShell-like console
+            case "js":
+                // Check if the console is already open
+                if (jsConsoleOpen) {
+                    outputElement.innerHTML += "JavaScript PowerShell console is already open.\n";
+                } else {
+                    jsConsoleOpen = true;
+                    outputElement.innerHTML += "JavaScript PowerShell console opened. Type Ctrl+C to exit.\n";
+                    inputElement.removeEventListener(`keydown`,normalConsoleHandler)
+                    // Add an event listener to the input element for handling JavaScript commands
+                    inputElement.addEventListener('keydown', jsConsoleHandler);
+
+                    // Change the prefix to indicate the console is active
+                    document.getElementById("main-prefix").innerHTML = " (js)>";
+
+                    // Clear the input field
+                    inputElement.value = "";
+                }
+                break;
         default:
             const outputText = `"${cmd}" command not found`;
             outputElement.innerHTML += outputText + '\n';
     }
+// Function to handle JavaScript commands in the console
+function jsConsoleHandler(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const command = inputElement.value;
+        if (command.startsWith("let ")) {
+            // Variable assignment
+            const assignmentCommand = command.slice(4); // Remove "let " from the beginning
+            try {
+                eval(assignmentCommand);
+                outputElement.innerHTML += `<span class="user-prefix"> (js)></span> ${command}\n`;
+            } catch (error) {
+                outputElement.innerHTML += `<span class="user-prefix"> (js)></span> ${command}\n`;
+                outputElement.innerHTML += `<pre class="error">${error}</pre>\n`;
+            }
+        } else {
+            try {
+                // Evaluate the expression using the stored variables
+                const result = eval(command);
+                outputElement.innerHTML += `<span class="user-prefix"> (js)></span> ${command}\n`;
+                if (result !== undefined) {
+                    outputElement.innerHTML += `<pre>${result}</pre>\n`;
+                }
+            } catch (error) {
+                outputElement.innerHTML += `<span class="user-prefix"> (js)></span> ${command}\n`;
+                outputElement.innerHTML += `<pre class="error">${error}</pre>\n`;
+            }
+        }
+        inputElement.value = '';
+    } else if (event.key === 'c' && event.ctrlKey) {
+        // Handle Ctrl+C to exit the console
+        outputElement.innerHTML += "JavaScript PowerShell console closed by Ctrl+C.\n";
+        document.getElementById("main-prefix").innerHTML = " " + fileSystem.where() + ">";
+        jsConsoleOpen = false;
+        inputElement.value = '';
+        inputElement.removeEventListener('keydown', jsConsoleHandler);
+        inputElement.addEventListener('keydown', normalConsoleHandler);
+    }
+}
 
 }

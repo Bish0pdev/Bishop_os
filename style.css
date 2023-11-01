@@ -54,6 +54,7 @@ body {
   width: 100%;
   height: 100%;
   background-color:black;
+  overflow: hidden;
 }
 body::before {
   content: '';
@@ -61,10 +62,10 @@ body::before {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: repeating-linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.3) 0px, /* Increase opacity for more visibility */
+    rgba(27, 27, 27, 0.3) 0px, /* Increase opacity for more visibility */
     rgba(0, 0, 0, 0.4) 2px, /* Increase the line width */
     transparent 2px,
     transparent 4px /* Increase the spacing between lines */
@@ -86,7 +87,7 @@ body::after {
 .custom-cursor{
   cursor: none;
 }
-#editor {
+#editor, #page {
   white-space: pre-wrap;
   margin: 10px;
   padding: 10px;
@@ -94,13 +95,13 @@ body::after {
   border-style: solid;
   outline: none;
   text-align: left;
+  max-width: 1000px;
 }
-#page{
-  white-space: pre-wrap;
-  margin: 10px;
-  padding: 10px;
-  border-color: white;
-  border-style: solid;
-  outline: none;
-  text-align: left;
+#editor{
+  border-color: green;
+}
+#page::before{
+  content: "(Read Only)";
+  display: block;
+  color: coral;
 }
