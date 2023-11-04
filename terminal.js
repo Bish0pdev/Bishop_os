@@ -1,18 +1,29 @@
 import { FileSystem } from './sys/FileSystem.js';
 import { Initdefaultfiles } from './sys/start.js';
+
+const DEV_MODE = true;
+
 //Refrences
 const inputElement = document.getElementById('input');
 const outputElement = document.getElementById('output');
 const editor = document.getElementById("editor");
-// Usage example
-const fileSystem = new FileSystem();
 let editorOpen = false; // Variable to track if the editor is open
 // Create a flag to track if the JavaScript PowerShell console is open
 let jsConsoleOpen = false;
+// Load file system data from local storage
+let fileSystemData = localStorage.getItem('fileSystemData');
+let fileSystem;
+if(DEV_MODE) {
+    localStorage.clear();
+}
 
-
-//Initilize my built in files
-Initdefaultfiles(fileSystem);
+// Check if file system data exists in local storage
+if (fileSystemData)  {
+    fileSystem = new FileSystem(JSON.parse(fileSystemData));
+}else  {
+    fileSystem = new FileSystem();
+    Initdefaultfiles(fileSystem);
+}
 GetCommand("cat readme.txt")
 //Initially set up the  main prefix
 document.getElementById("main-prefix").innerHTML = " " + fileSystem.where() + ">";
@@ -49,10 +60,22 @@ function normalConsoleHandler(event) {
 }
 inputElement.addEventListener('keydown',normalConsoleHandler);
 
+
+
 function GetCommand(cmd) {
     const args = cmd.split(' '); // Split the command into an array of arguments.
     const command = args[0]; // The first element is the command itself.
+    if(args[1] == "="){
+        //Set variable command
+        switch(command) {
+            
+
+
+        }
+
+    } else {
     switch(command)  {
+        //Normal
         case "clear":
             outputElement.innerHTML = '';
             editorOpen = false;
@@ -76,6 +99,7 @@ function GetCommand(cmd) {
             - -help: Display this help message.
             - date: Show the current date and time.
             - echo [text]: Display the provided text.
+            - goto [url]: Opens URL in new window. (Will not work if popups are disabled)
 
             --Files--
             - cd [directory]: Change the current directory.
@@ -85,9 +109,12 @@ function GetCommand(cmd) {
             - cat [file]: Read the contents of a file.
             - back: Goes to parent directory
             -delete [file/directory]: Will remove a directory/file
+            -format-disk: Will remove all custom user files from disc and local storage.
+            
             --Applications--
-            - ed (file): Bishop_os built in text editor.
+            - ed [-a || -s] (file): Bishop_os built in text editor. -a = Advanced| -s = Simple
             - - save [file]: Can only be used when ed is open. Will save the edited file.
+            - - exit: exit's the editor without saving.
             -js: (WIP EXPERIMENTAL) Js interpretor built into Bishop_os. Currently variables do not work but anything you can do in one line should.
             \n`;
             outputElement.innerHTML += helpText;
@@ -97,6 +124,10 @@ function GetCommand(cmd) {
             outputElement.innerHTML += currentDate + '\n';
             break;
         case "cd":
+            if(args[1] ===  `..`){
+                GetCommand("back");
+                break
+            }
             const result = fileSystem.cd(args[1]);
             outputElement.innerHTML += result + '\n';
             document.getElementById("main-prefix").innerHTML = " " + fileSystem.where() + ">";
@@ -127,29 +158,52 @@ function GetCommand(cmd) {
         case "ed":
             if(editorOpen) {outputElement.innerHTML += "ed: Can only have one editor open at a time. Please save other editor first using save [filename] \n"; break;}
             if (args.length > 1) {
-                const fileName = args[1];
+                const fileName = args[2];
+                const mode = args[1];
                 const fileContent = fileSystem.cat(fileName);
-    
-                if (fileContent != `File "${fileName}" not found.`) {
-                    outputElement.innerHTML += `(${fileName}: Use "save ${fileName}" in the console to save once you are done)` + '\n' + `<div id="editor-container">
-                        <div id="editor" contenteditable="true">${fileContent}</div>
-                    </div>`;
-    
-                    editorOpen = true; // Editor is open
-                } else {
-                    outputElement.innerHTML += `File "${fileName}" not found. Opening a new file. Use "save [desired file name]" to save the new file`;
-                    outputElement.innerHTML += `<div id="editor-container">
-                        <div id="editor" contenteditable="true"></div></div>`
-                    editorOpen = true; // Editor is open
+                if(mode.toLowerCase() !== "-a" && mode.toLowerCase() !== "-s") {
+                    outputElement.innerHTML += `Please use either -a (advanced) or -s (simple) as the second argument. The filename should be third \n ("ed -s readme.txt") \n`;
+                    break
                 }
+
+
+                let formattedContent = ''; // Initialize the variable for formatted content
+
+            if (fileContent != `File "${fileName}" not found.`) {
+                // Check the mode and format the content accordingly
+                if (mode === "-s") {
+                    formattedContent = fileContent; // You need to define this function
+                } else if (mode === "-a") {
+                    formattedContent = escapeHtml(fileContent);
+                }
+
+                outputElement.innerHTML += `(${fileName}: Use "save ${fileName}" in the console to save once you are done)` + '\n' + `<div id="editor-container">
+                    <div id="editor" contenteditable="true">${formattedContent}</div>
+                </div>`;
+
+                editorOpen = true; // Editor is open
+            } else {
+                outputElement.innerHTML += `File "${fileName}" not found. Opening a new file. Use "save [desired file name]" to save the new file`;
+                outputElement.innerHTML += `<div id="editor-container">
+                    <div id="editor" contenteditable="true"></div></div>`
+                editorOpen = true; // Editor is open
+            }
             } else {
                 outputElement.innerHTML += `Opening a new file. Use "save [desired file name]" to save the new file`;
-                    outputElement.innerHTML += `<div id="editor-container">
-                        <div id="editor" contenteditable="true"></div></div>`
-                    editorOpen = true; // Editor is open
+                outputElement.innerHTML += `<div id="editor-container">
+                    <div id="editor" contenteditable="true"></div></div>`
+                editorOpen = true; // Editor is open
             }
-            break;
-    
+    break;
+        case "format-disk":
+                if (confirm("Are you sure you want to format the disk? This will delete all files and directories, Execpt the default ones.")) {
+                    localStorage.clear();
+                    location.reload();
+                } else {
+                    outputElement.innerHTML += 'Disk format aborted.\n';
+                }
+                break;
+            
         case "save":
             if (editorOpen) {
                 const editedContent = document.getElementById("editor").textContent;
@@ -163,6 +217,7 @@ function GetCommand(cmd) {
                     }else{
                         fileSystem.touch(fileName, editedContent);
                         outputElement.innerHTML += `New file "${fileName}" saved.\n`;
+                        document.getElementById("editor").innerHTML = includeHtml(document.getElementById("editor").innerHTML);
                         document.getElementById("editor").id = "page";
                     }
                     editorOpen = false;
@@ -171,6 +226,14 @@ function GetCommand(cmd) {
                 }
             } else {
                 outputElement.innerHTML += 'save: No active editor. Open an editor using "ed" first.\n';
+            }
+            break;
+        case "exit":
+            if (editorOpen) {
+                document.getElementById("editor").id = "page";
+                editorOpen = false;
+            } else {
+                outputElement.innerHTML += 'exit: No active application.\n';
             }
             break;
         case "delete":
@@ -207,9 +270,19 @@ function GetCommand(cmd) {
                     inputElement.value = "";
                 }
                 break;
+            case "goto":
+                if (args.length > 1) {
+                    const url = args[1];
+                    window.open(url, '_blank'); // Open the URL in a new tab or window
+                    outputElement.innerHTML += `Opening ${url} in a new tab or window.\n`;
+                } else {
+                    outputElement.innerHTML += "Usage: goto [website URL]\n";
+                }
+                break;
         default:
             const outputText = `"${cmd}" command not found`;
             outputElement.innerHTML += outputText + '\n';
+    }
     }
 // Function to handle JavaScript commands in the console
 function jsConsoleHandler(event) {
@@ -251,4 +324,26 @@ function jsConsoleHandler(event) {
     }
 }
 
+}
+function escapeHtml(str) {
+    const htmlEntities = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    };
+
+    return str.replace(/[&<>"']/g, char => htmlEntities[char]);
+}
+function includeHtml(str) {
+    const htmlEntities = {
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        '&#39;': "'"
+    };
+
+    return str.replace(/&amp;|&lt;|&gt;|&quot;|&#39;/g, entity => htmlEntities[entity]);
 }

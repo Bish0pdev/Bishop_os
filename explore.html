@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="terminal.css">
+</head>
+<body>
+    <a href="terminal.html">
+    <pre id="logo">            
+        /$$       /$$           /$$                                                     
+        | $$      |__/          | $$                                                      
+        | $$$$$$$  /$$  /$$$$$$$| $$$$$$$   /$$$$$$   /$$$$$$           /$$$$$$   /$$$$$$$
+        | $$__  $$| $$ /$$_____/| $$__  $$ /$$__  $$ /$$__  $$         /$$__  $$ /$$_____/
+        | $$  \ $$| $$|  $$$$$$ | $$  \ $$| $$  \ $$| $$  \ $$        | $$  \ $$|  $$$$$$ 
+        | $$  | $$| $$ \____  $$| $$  | $$| $$  | $$| $$  | $$        | $$  | $$ \____  $$
+        | $$$$$$$/| $$ /$$$$$$$/| $$  | $$|  $$$$$$/| $$$$$$$/        |  $$$$$$/ /$$$$$$$/
+        |_______/ |__/|_______/ |__/  |__/ \______/ | $$____/  /$$$$$$ \______/ |_______/ 
+                                                    | $$      |______/                    
+                                                    | $$                                  
+                                                    |__/                                 
+                                            </pre></a>
+    <div class="file-explorer">
+        <div class="toolbar">
+            <button id="back-button">Back</button>
+            <button id="refresh-button">Refresh</button>
+        </div>
+        <div class="current-directory">
+            <strong>Current Directory: </strong><span id="current-directory">/root</span>
+        </div>
+        <div class="file-list">
+            <ul id="file-list">
+                <!-- File and directory items will be listed here -->
+            </ul>
+        </div>
+        <div class="file-details" id="file-details">
+            <strong>File Details</strong>
+            <pre id="file-content"></pre>
+        </div>
+    </div>
+</body>
+<script type="module" src="explore.js"></script>
+</html>

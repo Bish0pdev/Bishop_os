@@ -1,7 +1,14 @@
 export class FileSystem {
-    constructor() {
+    constructor(initialData = {}) {
         this.root = new Directory('root');
         this.currentDirectory = this.root;
+
+        // If initial data is provided, use it to populate the userfiles folder
+        if (initialData.name === 'root') {
+            this.root = Directory.loadFromObject(initialData);
+            this.currentDirectory = this.root;
+        }
+
 
         this.cd = this.cd.bind(this);
         this.ls = this.ls.bind(this);
@@ -11,6 +18,12 @@ export class FileSystem {
         this.cat = this.cat.bind(this);
         this.back = this.back.bind(this);
     }
+    // Save the file system to localStorage.
+    saveFileSystem() {
+        localStorage.setItem('fileSystemData', JSON.stringify(this.root.toObject()));
+    }
+
+
     // Recursive function to delete a file or directory and its contents.
     deleteItem(targetName) {
     const targetDirectory = this.currentDirectory.findDirectory(targetName);
@@ -48,6 +61,7 @@ export class FileSystem {
 
         if (targetDirectory) {
             this.currentDirectory = targetDirectory;
+            this.saveFileSystem(); // Save changes to the file system.
             return `Changed directory to ${this.currentDirectory.getPath()}`;
         } else {
             return `Directory "${directoryName}" not found.`;
@@ -59,6 +73,7 @@ export class FileSystem {
 
         if (parentDirectory) {
             this.currentDirectory = parentDirectory;
+            this.saveFileSystem();
             return `Changed directory to ${this.currentDirectory.getPath()}`;
         } else {
             return `Already at the root directory.`;
@@ -74,12 +89,15 @@ export class FileSystem {
     // Create a new directory in the current directory.
     mkdir(directoryName) {
         this.currentDirectory.createDirectory(directoryName);
+        this.saveFileSystem();
         return `Created directory "/${directoryName}"`;
+        
     }
 
     // Create a new file in the current directory.
     touch(fileName, content) {
         this.currentDirectory.createFile(fileName, content);
+        this.saveFileSystem();
         return `Created file "${fileName}"`;
     }
     //Gets the path to the current directory
@@ -142,6 +160,37 @@ class Directory {
     getParent() {
         return this.parent;
     }
+    toObject() {
+        const obj = {
+            name: this.name,
+            directories: {},
+            files: {},
+        };
+
+        for (const dirName of Object.keys(this.directories)) {
+            obj.directories[dirName] = this.directories[dirName].toObject();
+        }
+
+        for (const fileName of Object.keys(this.files)) {
+            obj.files[fileName] = this.files[fileName].toObject();
+        }
+
+        return obj;
+    }
+
+    static loadFromObject(obj, parent = null) {
+        const directory = new Directory(obj.name, parent);
+
+        for (const dirName in obj.directories) {
+            directory.directories[dirName] = Directory.loadFromObject(obj.directories[dirName], directory);
+        }
+
+        for (const fileName in obj.files) {
+            directory.files[fileName] = File.loadFromObject(obj.files[fileName]);
+        }
+
+        return directory;
+    }
 }
 
 
@@ -153,5 +202,15 @@ class File {
 
     getContent() {
         return this.content;
+    }
+    toObject() {
+        return {
+            name: this.name,
+            content: this.content,
+        };
+    }
+
+    static loadFromObject(obj) {
+        return new File(obj.name, obj.content);
     }
 }
