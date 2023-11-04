@@ -1,7 +1,7 @@
 import { FileSystem } from './sys/FileSystem.js';
 import { Initdefaultfiles } from './sys/start.js';
 
-const DEV_MODE = true;
+const DEV_MODE = false;
 
 //Refrences
 const inputElement = document.getElementById('input');
