@@ -1,7 +1,7 @@
 import { FileSystem } from './sys/FileSystem.js';
 import { Initdefaultfiles } from './sys/start.js';
 
-const DEV_MODE = false;
+const DEV_MODE = true;
 
 //Refrences
 const inputElement = document.getElementById('input');
@@ -63,6 +63,7 @@ inputElement.addEventListener('keydown',normalConsoleHandler);
 
 
 function GetCommand(cmd) {
+    
     const args = cmd.split(' '); // Split the command into an array of arguments.
     const command = args[0]; // The first element is the command itself.
     if(args[1] == "="){
@@ -283,6 +284,7 @@ function GetCommand(cmd) {
             const outputText = `"${cmd}" command not found`;
             outputElement.innerHTML += outputText + '\n';
     }
+    
     }
 // Function to handle JavaScript commands in the console
 function jsConsoleHandler(event) {
@@ -346,4 +348,7 @@ function includeHtml(str) {
     };
 
     return str.replace(/&amp;|&lt;|&gt;|&quot;|&#39;/g, entity => htmlEntities[entity]);
+}
+function scrollToBottom() {
+    document.scrolltop = document.scrollHeight;
 }

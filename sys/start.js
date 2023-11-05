@@ -4,7 +4,8 @@ export function Initdefaultfiles(sys) {
     console.log(sys.mkdir('_mystuff'));
     sys.touch('readme.txt', `<p><h1>WELCOME TO BISHOP_OS</h1> Use the -help command to get started!
     Up and down arrow keys cycle through command history
-    [You can edit this document using ed readme.txt] \n -BISH
+    [You can edit this document using ed readme.txt]
+    "clear" to clear this message \n -BISH
 </p>
 
 <h4>Changelog v0.2 "We're getting places"</h4>
@@ -93,7 +94,11 @@ export function Initdefaultfiles(sys) {
     
     sys.touch("[01101100_01101111_01101100].txt", `01101100 01101111 01101100 00100000 01111001 01101111 01110101 00100000 01100001 01100011 01110100 01110101 01100001 01101100 01101100 01111001 00100000 01110100 01101111 01101111 01101011 00100000 01110100 01101001 01101101 01100101 00100000 01110100 01101111 00100000 01100011 01101111 01101110 01110110 01100101 01110010 01110100 00100000 01110100 01101000 01101001 01110011 00111111 00100001 00111111 00100000 01100011 01110010 01100001 01111010 01111001 01111001 01111001 01111001 01111001 00101110 `);
 
+    sys.touch("[FREE-PSP!!!].gif", `<img src="sys/jhesus.gif">`);
 
+    sys.touch("[showbiz].gif",`<img src="sys/showbis.gif">`);
+
+    sys.touch("[crookedteeth].gif",`<img src="sys/crookedteeth.gif">`);
 
   //#endregion
   //sys.mkdir("חטאה");
