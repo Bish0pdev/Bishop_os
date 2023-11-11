@@ -1,7 +1,7 @@
 import { FileSystem } from './FileSystem.js';
 
 export function Initdefaultfiles(sys) {
-    console.log(sys.mkdir('_mystuff'));
+    /* console.log(sys.mkdir('_mystuff'));
     sys.touch('readme.txt', `<p><h1>WELCOME TO BISHOP_OS</h1> Use the -help command to get started!
     Up and down arrow keys cycle through command history
     [You can edit this document using ed readme.txt]
@@ -98,7 +98,7 @@ export function Initdefaultfiles(sys) {
 
     sys.touch("[showbiz].gif",`<img src="sys/showbis.gif">`);
 
-    sys.touch("[crookedteeth].gif",`<img src="sys/crookedteeth.gif">`);
+    sys.touch("[crookedteeth].gif",`<img src="sys/crookedteeth.gif">`); */
 
   //#endregion
   //sys.mkdir("חטאה");
