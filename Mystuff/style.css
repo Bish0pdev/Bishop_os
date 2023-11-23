@@ -1,0 +1,98 @@
+
+
+body{
+    background: url("images/pat.gif") center center;
+    background-size:500px;
+    height: 100vh;
+    color: white;
+    text-align: center;
+}
+  
+  .container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-size: cover;
+    background: url("images/KERMIT.gif") center center;
+    display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh; /* Set the container to take the full height of the viewport */
+  }
+img{
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+  .header {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .navbar {
+    background-color: #ff00ff; /* Magenta, another popular Y2K color */
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    padding: 10px;
+    margin: 0 10px;
+  }
+  
+  .nav-link:hover {
+    text-decoration: underline;
+  }
+  
+  .main-content {
+    padding: 20px;
+  }
+  
+  .footer {
+    background-color: #ffff00; /* Yellow, because why not? */
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  /* Sample content styling */
+  h1, h2, h3 {
+    color: ghostwhite;
+    margin: 10px;
+	letter-spacing: 10px;
+    background-color: black;
+  }
+  
+  p {
+    line-height: 1.5;
+  }
+  
+  /* Button styling */
+  button {
+    background-color: #000000; /* Black, a timeless Y2K color */
+    color: #ffffff; /* White text for contrast */
+    padding: 10px 20px;
+    text-decoration: none;
+    display: inline-block;
+    margin: 10px;
+    border-radius: 5px;
+  }
+  a {
+    color: #ffffff; /* White text for contrast */
+    padding: 10px 20px;
+    text-decoration: none;
+    display: block;
+    margin: 10px;
+    width: 50%;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  }
+  button:hover {
+    background-color: #ff9900; /* Orange, for that Y2K flair */
+  }
+  #known{
+    border: none;
+    background:none;
+  }

@@ -51,7 +51,7 @@ function startMainApplication() {
     bootUpContainer.style.display = 'none';
 
     // Navigate to a different page
-    window.location.href = 'terminal.html'; // Replace with desired URL
+    window.location.href = 'Terminal/terminal.html'; // Replace with desired URL
 }
 
 // Add a click event listener to the boot-up-container

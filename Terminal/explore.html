@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="terminal.css" id="current-stylesheet">
+</head>
+<body>
+    <a href="terminal.html">
+    <pre id="logo">            
+        /$$       /$$           /$$                                                     
+        | $$      |__/          | $$                                                      
+        | $$$$$$$  /$$  /$$$$$$$| $$$$$$$   /$$$$$$   /$$$$$$           /$$$$$$   /$$$$$$$
+        | $$__  $$| $$ /$$_____/| $$__  $$ /$$__  $$ /$$__  $$         /$$__  $$ /$$_____/
+        | $$  \ $$| $$|  $$$$$$ | $$  \ $$| $$  \ $$| $$  \ $$        | $$  \ $$|  $$$$$$ 
+        | $$  | $$| $$ \____  $$| $$  | $$| $$  | $$| $$  | $$        | $$  | $$ \____  $$
+        | $$$$$$$/| $$ /$$$$$$$/| $$  | $$|  $$$$$$/| $$$$$$$/        |  $$$$$$/ /$$$$$$$/
+        |_______/ |__/|_______/ |__/  |__/ \______/ | $$____/  /$$$$$$ \______/ |_______/ 
+                                                    | $$      |______/                    
+                                                    | $$                                  
+                                                    |__/                                 
+    </pre></a>
+    <div class="file-explorer">
+        <!-- Add a button to switch between light and dark mode -->
+        <button id="toggle-mode-button">For Mrs:Sheffild</button>
+
+        <!-- Rest of your file explorer content -->
+        <div class="toolbar">
+            <button id="back-button">Back</button>
+            <button id="refresh-button">Refresh</button>
+        </div>
+        <div class="current-directory">
+            <strong>Current Directory: </strong><span id="current-directory">/root</span>
+        </div>
+        <div class="file-list">
+            <ul id="file-list">
+                <!-- File and directory items will be listed here -->
+            </ul>
+        </div>
+        <div class="file-details" id="file-details">
+            <strong>File Details</strong>
+            <pre id="file-content"></pre>
+        </div>
+    </div>
+
+    <script type="module" src="explore.js"></script>
+
+    <script>
+        const toggleModeButton = document.getElementById('toggle-mode-button');
+        const currentStylesheet = document.getElementById('current-stylesheet');
+
+        toggleModeButton.addEventListener('click', () => {
+            // Toggle between "terminal.css" and "Lmode.css"
+            const currentStylesheetHref = currentStylesheet.getAttribute('href');
+            const newStylesheetHref = currentStylesheetHref.includes('terminal.css')
+                ? 'Lmode.css'
+                : 'terminal.css';
+
+            // Set the new stylesheet
+            currentStylesheet.setAttribute('href', newStylesheetHref);
+            toggleModeButton.innerText = ":)";
+        });
+    </script>
+</body>
+</html>
