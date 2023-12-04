@@ -1,7 +1,8 @@
 # Bishop_os
 
-A web-based terminal-like application with a boot-up page and basic file system operations. This project simulates a command-line interface within a web browser. It saves changed files to local storage on the browser. 
+A web-based terminal-like application with a boot-up page and basic file system operations, Fully built in frontend-JavaScript by hand. 
 
+[View the pages build here!](https;//bishop-dev.com)
 ## Available commands
 ### Misc
 - clear: Clear the terminal.
@@ -16,10 +17,10 @@ A web-based terminal-like application with a boot-up page and basic file system 
 - touch [file] [content]: Create a new file with content.
 - cat [file]: Read the contents of a file.
 - back: Goes to parent directory
--delete [file/directory]: Will remove a directory/file
--format-disk: Will remove all custom user files from disc and local storage.
+- delete [file/directory]: Will remove a directory/file
+- format-disk: Will remove all custom user files from disc and local storage.
 ### Applications
 - ed [-a || -s] (file): Bishop_os built in text editor. -a = Advanced| -s = Simple
 - - save [file]: Can only be used when ed is open. Will save the edited file.
 - - exit: exit's the editor without saving.
--js: (WIP EXPERIMENTAL) Js interpreter. Currently, variables do not work but anything you can do in one line should.
+- js: (WIP EXPERIMENTAL) Js interpreter. Currently, variables do not work but anything you can do in one line should.

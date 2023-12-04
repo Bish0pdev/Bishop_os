@@ -11,10 +11,11 @@ export function Initdefaultfiles(sys) {
     `);
     sys.mkdir("Portfolio-COSC-2436")
     sys.cd("Portfolio-COSC-2436")
-    sys.touch("GradeCalculater.java", `<a href="sys/projects/GradeCalculator-1.java">View Source Code</a> <h1>Output</h1> <img src= sys/projects/gradecaloutput.png> `)
-    sys.touch("GradesCal.java", `<a href="sys/projects/GradesProgram-1.java">View Source Code</a> <h1>Output</h1> <img src= sys/projects/grades.png> `)
-    sys.touch("RepairCost.java", `<a href="sys/projects/InitialsRepairEstimate.java">View Source Code</a> <h1>Output</h1> <img src= sys/projects/repair.png> `)
-    sys.touch("Cafe.html", `<a href="sys/projects/Butler_MP_SLO3">Go to project</a> `)
-    sys.touch("Grades.html", `<a href="sys/projects/Butler_MP_SLO2">Go to project</a> `)
+    sys.touch("GradeCalculater.java", `<a href="sys/projects/GradeCalculator-1.java" target="_blank">View Source Code</a> <h1>Output</h1> <img src= sys/projects/gradecaloutput.png> `)
+    sys.touch("GradesCal.java", `<a href="sys/projects/GradesProgram-1.java" target="_blank">View Source Code</a> <h1>Output</h1> <img src= sys/projects/grades.png> `)
+    sys.touch("RepairCost.java", `<a href="sys/projects/InitialsRepairEstimate.java" target="_blank">View Source Code</a> <h1>Output</h1> <img src= sys/projects/repair.png> `)
+    sys.touch("Butler_Prog#6.py", `<a href="sys/projects/Butler_Prog6.py" target="_blank">Download Project</a>`)
+    sys.touch("Cafe.html", `<a href="sys/projects/Butler_MP_SLO3" target="_blank">Go to project</a> `)
+    sys.touch("Grades.html", `<a href="sys/projects/Butler_MP_SLO2" target="_blank">Go to project</a> `)
     sys.back();
 }
