@@ -11,6 +11,22 @@ export function Initdefaultfiles(sys) {
 
 
     sys.mkdir("Portfolio");
+
+    let username = "Bish0pdev";
+    getReadme(username,"BParticles")
+        .then(readmeContent => {
+            sys.cd("Portfolio");
+            sys.touch("Bparticles.github", `<a href="https://github.com/Bish0pdev/BParticles" target="_blank" class="button-terminal">View On Github</a>` + readmeContent)
+            sys.back();
+        })
+        .catch(error => console.error(error));
+    getReadme(username,"Bishop_os")
+        .then(readmeContent => {
+            sys.cd("Portfolio");
+            sys.touch("Bishop_OS.github", `<a href="https://github.com/Bish0pdev/Bishop_os" target="_blank" class="button-terminal">View On Github</a> <img src="https://raw.githubusercontent.com/Bish0pdev/Bishop_os/main/logo.png">` + readmeContent)
+            sys.back();
+        })
+
     sys.cd("Portfolio");
 
     sys.mkdir("School Projects");
@@ -22,20 +38,6 @@ export function Initdefaultfiles(sys) {
     sys.touch("Cafe.html", `<a href="sys/projects/Butler_MP_SLO3" target="_blank">Go to project</a> `);
     sys.touch("Grades.html", `<a href="sys/projects/Butler_MP_SLO2" target="_blank">Go to project</a> `);
     
-    let username = "Bish0pdev";
-    getReadme(username,"BParticles")
-        .then(readmeContent => {
-            sys.cd("Portfolio");
-            sys.touch("Bparticles.github", `<a href="https://github.com/Bish0pdev/BParticles" target="_blank">View On Github</a>` + readmeContent)
-            sys.back();
-        })
-        .catch(error => console.error(error));
-    getReadme(username,"Bishop_os")
-        .then(readmeContent => {
-            sys.cd("Portfolio");
-            sys.touch("Bishop_OS.github", `<a href="https://github.com/Bish0pdev/Bishop_os" target="_blank">View On Github</a> <img src="https://github.com/Bish0pdev/Bishop_os/blob/main/logo.png">` + readmeContent)
-            sys.back();
-        })
     sys.back();
 }
 async function getReadme(username, repository) {

@@ -189,6 +189,7 @@ h1{
   border-top: solid white;
   border-bottom: solid white;
   display: block;
+  background-color: green;
   margin-bottom: 10px;
 }
 .FILE::before{
@@ -196,6 +197,7 @@ h1{
   border-top: solid white;
   border-bottom: solid white;
   display: block;
+  background-color: red;
   margin-bottom: 10px;
 }
 #logo,a{
