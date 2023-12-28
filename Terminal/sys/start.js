@@ -21,13 +21,13 @@ export function Initdefaultfiles(sys) {
     sys.touch("Butler_Prog#6.py", `<a href="sys/projects/Butler_Prog6.py" target="_blank">Download Project</a>`);
     sys.touch("Cafe.html", `<a href="sys/projects/Butler_MP_SLO3" target="_blank">Go to project</a> `);
     sys.touch("Grades.html", `<a href="sys/projects/Butler_MP_SLO2" target="_blank">Go to project</a> `);
-    sys.back();
-
-    sys.cd("Portfolio");
+    
     let username = "Bish0pdev";
     getReadme(username,"BParticles")
         .then(readmeContent => {
+            sys.cd("Portfolio");
             sys.touch("Bparticles.github", `<a href="https://github.com/Bish0pdev/BParticles" target="_blank">View On Github</a>` + readmeContent)
+            sys.back();
         })
         .catch(error => console.error(error));
     sys.back();

@@ -99,10 +99,23 @@ export class FileSystem {
 
     // Create a new file in the current directory.
     touch(fileName, content) {
-        this.currentDirectory.createFile(fileName, content);
-        this.saveFileSystem();
-        return `Created file "${fileName}"`;
+        const targetFile = this.currentDirectory.findFile(fileName);
+
+        if (targetFile) {
+            if (targetFile.isLocked()) {
+                return `Cannot modify locked file "${fileName}".`;
+            }
+
+            this.currentDirectory.createFile(fileName, content);
+            this.saveFileSystem();
+            return `Modified file "${fileName}".`;
+        } else {
+            this.currentDirectory.createFile(fileName, content);
+            this.saveFileSystem();
+            return `Created file "${fileName}".`;
+        }
     }
+    
     //Gets the path to the current directory
     where() {
         return this.currentDirectory.getPath()
@@ -117,6 +130,42 @@ export class FileSystem {
             return `File "${fileName}" not found.`;
         }
     }
+
+    // Lock the specified file or directory in the current directory.
+    lock(targetName) {
+        const targetDirectory = this.currentDirectory.findDirectory(targetName);
+        const targetFile = this.currentDirectory.findFile(targetName);
+
+        if (targetDirectory) {
+            targetDirectory.lock();
+            this.saveFileSystem();
+            return `Locked directory "${targetName}".`;
+        } else if (targetFile) {
+            targetFile.lock();
+            this.saveFileSystem();
+            return `Locked file "${targetName}".`;
+        } else {
+            return `File or directory "${targetName}" not found.`;
+        }
+    }
+
+    // Unlock the specified file or directory in the current directory.
+    unlock(targetName) {
+        const targetDirectory = this.currentDirectory.findDirectory(targetName);
+        const targetFile = this.currentDirectory.findFile(targetName);
+
+        if (targetDirectory) {
+            targetDirectory.unlock();
+            this.saveFileSystem();
+            return `Unlocked directory "${targetName}".`;
+        } else if (targetFile) {
+            targetFile.unlock();
+            this.saveFileSystem();
+            return `Unlocked file "${targetName}".`;
+        } else {
+            return `File or directory "${targetName}" not found.`;
+        }
+    }
 }
 class Directory {
     constructor(name, parent = null) {
@@ -124,6 +173,7 @@ class Directory {
         this.directories = {};
         this.files = {};
         this.parent = parent;
+        this.locked = false;
     }
 
     getPath() {
@@ -194,6 +244,27 @@ class Directory {
 
         return directory;
     }
+
+    lock() {
+        this.locked = true;
+        for (const dirName in this.directories) {
+            const subDir = this.directories[dirName];
+            subDir.lock();
+        }
+        for (const fileName in this.files) {
+            const file = this.files[fileName];
+            file.lock();
+        }
+    }
+
+    unlock() {
+        this.locked = false;
+        for (const dirName in this.directories) {
+            const subDir = this.directories[dirName];
+            subDir.unlock();
+        }
+        this.unlockFiles();
+    }
 }
 
 
@@ -201,6 +272,7 @@ class File {
     constructor(name, content) {
         this.name = name;
         this.content = content;
+        this.locked = false;
     }
 
     getContent() {
@@ -215,5 +287,13 @@ class File {
 
     static loadFromObject(obj) {
         return new File(obj.name, obj.content);
+    }
+
+    lock() {
+        this.locked = true;
+    }
+
+    unlock() {
+        this.locked = false;
     }
 }
