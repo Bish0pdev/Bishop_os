@@ -30,6 +30,12 @@ export function Initdefaultfiles(sys) {
             sys.back();
         })
         .catch(error => console.error(error));
+    getReadme(username,"Bishop_os")
+        .then(readmeContent => {
+            sys.cd("Portfolio");
+            sys.touch("Bishop_OS.github", `<a href="https://github.com/Bish0pdev/Bishop_os" target="_blank">View On Github</a> <img src="https://github.com/Bish0pdev/Bishop_os/blob/main/logo.png">` + readmeContent)
+            sys.back();
+        })
     sys.back();
 }
 async function getReadme(username, repository) {

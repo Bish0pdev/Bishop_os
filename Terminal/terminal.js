@@ -1,7 +1,7 @@
 import { FileSystem } from './sys/FileSystem.js';
 import { Initdefaultfiles } from './sys/start.js';
 
-const DEV_MODE = false;
+const DEV_MODE = true;
 
 //Refrences
 const inputElement = document.getElementById('input');
@@ -11,10 +11,10 @@ let editorOpen = false; // Variable to track if the editor is open
 // Create a flag to track if the JavaScript PowerShell console is open
 let jsConsoleOpen = false;
 // Load file system data from local storage
-let fileSystemData = localStorage.getItem('fileSystemData');
+let fileSystemData;
 let fileSystem;
-if(DEV_MODE) {
-    localStorage.clear();
+if(!DEV_MODE) {
+   fileSystemData = localStorage.getItem('fileSystemData')
 }
 
 // Check if file system data exists in local storage

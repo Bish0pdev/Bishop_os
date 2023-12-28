@@ -1,3 +1,4 @@
+
 export class FileSystem {
     constructor(initialData = {}) {
         this.root = new Directory('root');
