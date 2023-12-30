@@ -2,7 +2,7 @@
 
 A web-based terminal-like application with a boot-up page and basic file system operations, Fully built in frontend-JavaScript by hand. This is also where I host my portfolio.
 
-[View the pages build here!](https://bishop-dev.com)
+[View the pages build here!](https://os.bishop-dev.com)
 ## Available commands
 ### Misc
 - clear: Clear the terminal.
