@@ -18,13 +18,13 @@ if(!DEV_MODE) {
 }
 
 // Check if file system data exists in local storage
-if (fileSystemData)  {
+if (fileSystemData != null)  {
     fileSystem = new FileSystem(JSON.parse(fileSystemData));
 }else  {
     fileSystem = new FileSystem();
     Initdefaultfiles(fileSystem);
 }
-GetCommand("cat readme.txt")
+//GetCommand("cat readme.txt")
 //Initially set up the  main prefix
 document.getElementById("main-prefix").innerHTML = " " + fileSystem.where() + ">";
 

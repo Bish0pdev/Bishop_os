@@ -14,7 +14,7 @@ function getRandomInt(min, max) {
     let zalgoText = '';
     for (let i = 0; i < text.length; i++) {
       zalgoText += text[i];
-      const numZalgo = getRandomInt(1, 3); // Adjust as needed
+      const numZalgo = getRandomInt(1, 2); // Adjust as needed
       for (let j = 0; j < numZalgo; j++) {
         const randomZalgoChar = zalgoChars[getRandomInt(0, zalgoChars.length - 1)];
         zalgoText += randomZalgoChar;
@@ -25,9 +25,9 @@ function getRandomInt(min, max) {
   }
 
   function updateZalgoText() {
-    const originalText = 'My Stuff';
+    const originalText = 'Hi';
     const zalgoText = zalgo(originalText);
-    document.getElementById('zalgo-text').innerText = zalgoText;
+    //document.getElementById('zalgo-text').innerText = zalgoText;
   }
 
   setInterval(updateZalgoText, 50); // Update every second
